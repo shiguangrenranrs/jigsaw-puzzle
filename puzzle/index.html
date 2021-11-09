@@ -4,21 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="./reset.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
     <script src="./jquery-3.4.1.min.js"></script>
     <style>
+        .container {
+            padding-top: 20vh;
+        }
+
+        .container .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        p {
+            text-align: center;
+        }
+
         #main {
             /* display: flex;
-            flex-wrap: wrap; */
+            flex-wrap: wrap;
+            margin: 50px; */
             width: 200px;
             height: 200px;
-            margin: 50px;
             background-color: rgb(238, 220, 184);
             border: 10px solid rgb(117, 95, 82);
             border-radius: 10px;
             position: relative;
         }
-        
+
         #main>div {
             width: 50px;
             height: 50px;
@@ -37,7 +52,7 @@
             cursor: default;
             user-select: none;
         }
-        
+
         #main>#transparent {
             background: rgba(0, 0, 0, 0);
             border: none;
@@ -47,27 +62,38 @@
 </head>
 
 <body>
-    <div id="main">
-        <div class="item item-1">1</div>
-        <div class="item item-2">2</div>
-        <div class="item item-3">3</div>
-        <div class="item item-4">4</div>
-        <div class="item item-5">5</div>
-        <div class="item item-6">6</div>
-        <div class="item item-7">7</div>
-        <div class="item item-8">8</div>
-        <div class="item item-9">9</div>
-        <div class="item item-10">10</div>
-        <div class="item item-11">11</div>
-        <div class="item item-12">12</div>
-        <div class="item item-13">13</div>
-        <div class="item item-14">14</div>
-        <div class="item item-15">15</div>
-        <div class="item-16" id="transparent"></div>
+    <div class="container">
+        <div class="title">
+            <p>已移动了<span>0</span>步</p>
+        </div>
+        <div class="content">
+            <div id="main">
+                <div class="item item-1">1</div>
+                <div class="item item-2">2</div>
+                <div class="item item-3">3</div>
+                <div class="item item-4">4</div>
+                <div class="item item-5">5</div>
+                <div class="item item-6">6</div>
+                <div class="item item-7">7</div>
+                <div class="item item-8">8</div>
+                <div class="item item-9">9</div>
+                <div class="item item-10">10</div>
+                <div class="item item-11">11</div>
+                <div class="item item-12">12</div>
+                <div class="item item-13">13</div>
+                <div class="item item-14">14</div>
+                <div class="item item-15">15</div>
+                <div class="item-16" id="transparent"></div>
+            </div>
+        </div>
     </div>
+
 </body>
 <script>
     var items = $("#main>div");
+    var count = 0;
+    var countItem = $(".container p span");
+    countItem.text(count);
     bujv();
     delete items[items.length - 1];
     items.length--;
@@ -75,11 +101,11 @@
     appendText(items, inTextArr);
 
     var sides = items.width() + 2;
-    items.click(function() {
-        var x = $(this).position().left;
-        var y = $(this).position().top;
-        var tx = $("#transparent").position().left;
-        var ty = $("#transparent").position().top;
+    items.click(function () {
+        var x = parseInt($(this).position().left);
+        var y = parseInt($(this).position().top);
+        var tx = parseInt($("#transparent").position().left);
+        var ty = parseInt($("#transparent").position().top);
         if ((x == tx) || (y == ty)) {
             if ((x + sides == tx) || (x - sides == tx) || (y + sides == ty) || (y - sides == ty)) {
                 $(this).css({
@@ -90,28 +116,31 @@
                     "left": x,
                     "top": y,
                 });
+                count++;
+                countItem.text(count);
             } else if (x == tx) { //同列
-                if (y - ty > 0) {
-                    var aa = document.getElementById("main").getElementsByClassName("item");
-                    console.log(aa)
-                    for (var a = 0; a < items.length; a++) {}
-                } else if (y - ty < 0) {
-                    // +40
-                };
-                $("#transparent").css({
-                    "left": x,
-                    "top": y,
-                });
+
+                // if (y - ty > 0) {
+                //     var aa = document.getElementById("main").getElementsByClassName("item");
+                //     console.log(aa)
+                //     for (var a = 0; a < items.length; a++) {}
+                // } else if (y - ty < 0) {
+                //     // +40
+                // };
+                // $("#transparent").css({
+                //     "left": x,
+                //     "top": y,
+                // });
             } else if (y == ty) { //同行
-                if (x - tx > 0) {
-                    // -40
-                } else if (x - tx < 0) {
-                    // +40
-                };
-                $("#transparent").css({
-                    "left": x,
-                    "top": y,
-                });
+                // if (x - tx > 0) {
+                //     // -40
+                // } else if (x - tx < 0) {
+                //     // +40
+                // };
+                // $("#transparent").css({
+                //     "left": x,
+                //     "top": y,
+                // });
             };
         };
     });
@@ -159,7 +188,7 @@
     };
 
     function arrSort(arr) {
-        arr.sort(function(a, b) {
+        arr.sort(function (a, b) {
             return a - b;
         });
         return arr;
