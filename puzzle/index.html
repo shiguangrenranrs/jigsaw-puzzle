@@ -1,64 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh">
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="./reset.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <title>拼图</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/index.css">
     <script src="./jquery-3.4.1.min.js"></script>
-    <style>
-        .container {
-            padding-top: 20vh;
-        }
-
-        .container .content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        p {
-            text-align: center;
-        }
-
-        #main {
-            /* display: flex;
-            flex-wrap: wrap;
-            margin: 50px; */
-            width: 200px;
-            height: 200px;
-            background-color: rgb(238, 220, 184);
-            border: 10px solid rgb(117, 95, 82);
-            border-radius: 10px;
-            position: relative;
-        }
-
-        #main>div {
-            width: 50px;
-            height: 50px;
-            background-image: linear-gradient(#fff, #f0f0f0);
-            border: 1px solid #111;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 20px;
-            text-align: center;
-            line-height: 50px;
-            position: absolute;
-            left: 0;
-            top: 0;
-            z-index: 2;
-            transition: all 125ms linear;
-            cursor: default;
-            user-select: none;
-        }
-
-        #main>#transparent {
-            background: rgba(0, 0, 0, 0);
-            border: none;
-            z-index: 1;
-        }
-    </style>
+    <script src="./js/util.js"></script>
+    <script src="./js/index.js" defer></script>
 </head>
 
 <body>
@@ -87,112 +38,6 @@
             </div>
         </div>
     </div>
-
 </body>
-<script>
-    var items = $("#main>div");
-    var count = 0;
-    var countItem = $(".container p span");
-    countItem.text(count);
-    bujv();
-    delete items[items.length - 1];
-    items.length--;
-    var inTextArr = createText();
-    appendText(items, inTextArr);
-
-    var sides = items.width() + 2;
-    items.click(function () {
-        var x = parseInt($(this).position().left);
-        var y = parseInt($(this).position().top);
-        var tx = parseInt($("#transparent").position().left);
-        var ty = parseInt($("#transparent").position().top);
-        if ((x == tx) || (y == ty)) {
-            if ((x + sides == tx) || (x - sides == tx) || (y + sides == ty) || (y - sides == ty)) {
-                $(this).css({
-                    "left": tx,
-                    "top": ty,
-                });
-                $("#transparent").css({
-                    "left": x,
-                    "top": y,
-                });
-                count++;
-                countItem.text(count);
-            } else if (x == tx) { //同列
-
-                // if (y - ty > 0) {
-                //     var aa = document.getElementById("main").getElementsByClassName("item");
-                //     console.log(aa)
-                //     for (var a = 0; a < items.length; a++) {}
-                // } else if (y - ty < 0) {
-                //     // +40
-                // };
-                // $("#transparent").css({
-                //     "left": x,
-                //     "top": y,
-                // });
-            } else if (y == ty) { //同行
-                // if (x - tx > 0) {
-                //     // -40
-                // } else if (x - tx < 0) {
-                //     // +40
-                // };
-                // $("#transparent").css({
-                //     "left": x,
-                //     "top": y,
-                // });
-            };
-        };
-    });
-
-
-    function bujv() {
-        var k = 0;
-        for (var i = 0; i < 4; i++) {
-            for (var j = 0; j < 4; j++) {
-                items.eq(k).css({
-                    "left": j * 50,
-                    "top": i * 50,
-                });
-                k++;
-            };
-        };
-    };
-
-    function createText() {
-        var randomArr = new Array();
-        randomArr.unshift(getRandom(1, 15));
-        while (randomArr.length < 15) {
-            var a = getRandom(1, 15);
-            for (var i = 0; i < randomArr.length; i++) {
-                if (randomArr[i] == a) {
-                    break;
-                };
-                if (i == randomArr.length - 1) {
-                    randomArr.push(a);
-                };
-            };
-        };
-        return randomArr;
-    };
-
-    function appendText(arr1, arr2) {
-        var arr_min = Math.min(arr1.length, arr2.length);
-        for (var i = 0; i < arr_min; i++) {
-            arr1[i].innerText = arr2[i];
-        };
-    };
-
-    function getRandom(min, max) {
-        return Math.round(Math.random() * (max - min) + min);
-    };
-
-    function arrSort(arr) {
-        arr.sort(function (a, b) {
-            return a - b;
-        });
-        return arr;
-    };
-</script>
 
 </html>
