@@ -1,61 +1,50 @@
-var items = $("#main>div");
-var count = 0;
-var countItem = $(".container p span");
-countItem.text(count);
+// 图块
+const itemElements = document.querySelectorAll('#main>div');
+const transparentElement = document.querySelector('#transparent');
 
-initLayout(items);
+// 步数记录
+const stepElement = document.querySelector('#step');
+let stepCount = 0;
+stepElement.innerText = stepCount;
 
-delete items[items.length - 1];
-items.length--;
+// 初始化布局
+initLayout(itemElements);
 
-var inTextArr = uniqueValueArray();
+// 生成唯一的随机值数组
+const array = uniqueValueArray();
 
-appendText(items, inTextArr);
+// 去除对后一个透明元素，遍历数组值为DOM填入数值
+const itemElementsArray = Array.from(itemElements);
+itemElementsArray.pop();
+appendText(itemElementsArray, array);
 
-var sides = Math.round(items.width() + 2);
-items.click(function () {
-    var x = Math.round($(this).position().left);
-    var y = Math.round($(this).position().top);
-    var tx = Math.round($("#transparent").position().left);
-    var ty = Math.round($("#transparent").position().top);
-    if ((x == tx) || (y == ty)) {
-        if ((x + sides == tx) || (x - sides == tx) || (y + sides == ty) || (y - sides == ty)) {
-            $(this).css({
-                "left": tx,
-                "top": ty,
-            });
-            $("#transparent").css({
-                "left": x,
-                "top": y,
-            });
-            count++;
-            countItem.text(count);
-        } else if (x == tx) { //同列
+// 获取图块宽度
+const sideWidth = itemElements[0].offsetWidth;
 
-            // if (y - ty > 0) {
-            //     var aa = document.getElementById("main").getElementsByClassName("item");
-            //     console.log(aa)
-            //     for (var a = 0; a < items.length; a++) {}
-            // } else if (y - ty < 0) {
-            //     // +40
-            // };
-            // $("#transparent").css({
-            //     "left": x,
-            //     "top": y,
-            // });
-        } else if (y == ty) { //同行
-            // if (x - tx > 0) {
-            //     // -40
-            // } else if (x - tx < 0) {
-            //     // +40
-            // };
-            // $("#transparent").css({
-            //     "left": x,
-            //     "top": y,
-            // });
+// 为图块绑定事件与透明图块进行位置交换
+for (let i = 0; i < itemElements.length; i++) {
+    itemElements[i].addEventListener('click', function () {
+        const current = {
+            x: this.offsetLeft,
+            y: this.offsetTop
         };
-    };
-});
+        const transparent = {
+            x: transparentElement.offsetLeft,
+            y: transparentElement.offsetTop
+        }
+        if (current.x === transparent.x || current.y === transparent.y) {
+            if (current.x + sideWidth === transparent.x ||
+                current.x - sideWidth === transparent.x ||
+                current.y + sideWidth === transparent.y ||
+                current.y - sideWidth === transparent.y) {
+                this.style = `top:${transparent.y}px;left:${transparent.x}px;`;
+                transparentElement.style = `top:${current.y}px;left:${current.x}px;`;
+                stepCount += 1;
+                stepElement.innerText = stepCount;
+            }
+        }
+    });
+}
 
 /**
  * 
@@ -64,7 +53,6 @@ items.click(function () {
  * @param {number} item_width 每个元素的宽度
  */
 function initLayout(items, grid_count = 4, item_width = 50) {
-    let k = 0;
     for (let i = 0; i < grid_count; i++) {
         for (let j = 0; j < grid_count; j++) {
             items[grid_count * i + j].style
@@ -86,6 +74,11 @@ function uniqueValueArray(length = 15) {
     return Array.from(set);
 }
 
+/**
+ * 
+ * @param {HTMLElement[]} elements DOM元素数组
+ * @param {number[]} array 唯一随机值数组
+ */
 function appendText(elements, array) {
     for (let i = 0; i < elements.length; i++) {
         elements[i].innerText = array[i];
